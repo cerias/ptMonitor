@@ -1,6 +1,6 @@
 __author__ = 'cerias'
 
-from bottle import Bottle, get, run, ServerAdapter
+from bottle import Bottle, ServerAdapter
 
 # copied from bottle. Only changes are to import ssl and wrap the socket
 class SSLWSGIRefServer(ServerAdapter):
@@ -20,6 +20,7 @@ class SSLWSGIRefServer(ServerAdapter):
 
 class WebServer:
     def __init__(self, host, port):
+
         self._host = host
         self._port = port
         self._app = Bottle()
@@ -28,7 +29,7 @@ class WebServer:
     def _route(self):
         self._app.route('/', method='GET', callback=self._index)
 
-    def _start(self):
+    def start(self):
         srv = SSLWSGIRefServer(host=self._host, port=self._port)
         self._app.run(server=srv)
 

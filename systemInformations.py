@@ -8,10 +8,10 @@ class BasicInformations:
         pass
 
     def getInfo(self):
-        data = [{
+        data = {
             'system': platform.system(),
             'type': platform.machine(),
             'hostname': platform.node()
-        }]
+        }
 
         return data

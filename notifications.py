@@ -1,37 +1,27 @@
 __author__ = 'cerias'
 
-import urllib2
-import logging
-import json
-import ConfigParser
+import requests
+import async
 
-config = ConfigParser.RawConfigParser()
-config.read('conf/monitor.conf')
-print(config.get('logging','dir'))
+from logger import log
 
-config.set('logging', 'dir', "/home/cerias/")
-
-with open('conf/monitor.conf', 'wb') as configfile:
-    config.write(configfile)
-
-config.read('conf/monitor.conf')
-print(config.get('logging','dir'))
-
-logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.DEBUG)
-request = urllib2.Request(url='http://localhost:8080/testProjekt/test',data="hallo")
-response = urllib2.urlopen(request)
-logging.debug(response.read())
+from threading import Thread
 
 class Serverpush:
 
     def __init__(self,server):
 
-        _server = server
+        self._server = server
 
         pass
 
+
     def push(self,endpoint,data):
         currentEndpoint = "{}{}".format(self._server,endpoint)
-        request = urllib2.Request(url=currentEndpoint,data=data)
-        response = urllib2.urlopen(request)
-        logging.debug(response.read())
+        header = {'Content-Type': 'application/json'}
+        req = async.get(currentEndpoint,params=data,header=header)
+        # request = urllib2.Request(url=currentEndpoint,data=data,headers={'Content-Type': 'application/json'})
+        # response = urllib2.urlopen(request)
+        log.debug(req.text)
+
+        return req.text
