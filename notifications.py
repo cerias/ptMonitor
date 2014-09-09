@@ -1,7 +1,7 @@
 __author__ = 'cerias'
 
-import requests
-import async
+import urllib2
+
 
 from logger import log
 
@@ -19,9 +19,12 @@ class Serverpush:
     def push(self,endpoint,data):
         currentEndpoint = "{}{}".format(self._server,endpoint)
         header = {'Content-Type': 'application/json'}
-        req = async.get(currentEndpoint,params=data,header=header)
-        # request = urllib2.Request(url=currentEndpoint,data=data,headers={'Content-Type': 'application/json'})
-        # response = urllib2.urlopen(request)
-        log.debug(req.text)
+        request = urllib2.Request(url=currentEndpoint,data=data,headers={'Content-Type': 'application/json'})
 
-        return req.text
+        response = urllib2.urlopen(request)
+        dat = response.read()
+        response.close()
+        log.debug(dat)
+
+        return dat
+
